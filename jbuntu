@@ -1,0 +1,30 @@
+[ Config ]
+
+app=JBuntu 
+version=1.0
+description=Desktop for OpenTTY 
+
+include=/java/lib/yang
+
+config=execute set JVERSION=1.0; title JBuntu $JVERSION; log add info Running JBuntu $JVERSION; clear; logcat; buff xterm;
+command=xterm
+
+xterm=execute x11 make jbuntu;
+
+[ DISPLAY ]
+
+screen.title=JBuntu $JVERSION
+screen.button=Menu
+screen.button.cmd=execute x11 list jbuntu; buff xterm;
+
+list.title=Menu
+list.content=About,Editor,Explorer,Terminal,Memory,View Logs,Packages,Exit
+
+About=execute warn JBuntu $JVERSION\nDesktop for OpenTTY;
+Editor=execute nano;
+Explorer=execute dir f;
+Terminal=execute sh;
+Memory=execute htop;
+View Logs=execute log view;
+Packages=execute yang;
+Exit=execute exit;
