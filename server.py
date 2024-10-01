@@ -39,7 +39,7 @@ def handle_client(client_socket, addr):
                 except Exception as e:
                     data = e
 
-            elif command[0] == "http ":
+            elif command[0] == "http":
                 if not ' '.join(command[1:]):
                     data = "Missing website URL"
                 else:
