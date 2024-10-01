@@ -5,4 +5,4 @@ version=1.0
 description=Update Checker
 
 command=sync 
-sync=execute set QUERY=nano; install nano; query $REPO curl https://raw.githubusercontent.com/mrlima4095/OpenTTY-J2ME/main/assets/scripts/latest.sh; run; load nano;
+sync=execute set QUERY=nano; install nano; query $REPO http https://raw.githubusercontent.com/mrlima4095/OpenTTY-J2ME/main/assets/scripts/latest.sh; run; load nano;

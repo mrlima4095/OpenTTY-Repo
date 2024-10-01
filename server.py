@@ -13,7 +13,7 @@ import urllib.request
 
 # Server settings
 HOST = '0.0.0.0'  # Listen at current machine
-PORT = 4095       # Connection port setting
+PORT = 31522      # Connection port setting
 
 def handle_client(client_socket, addr):
     print(f"[+] {addr[0]} connected")
