@@ -6,82 +6,105 @@
 #  Copyright (C) 2024 "Mr. Lima"
 #  
 
+import sys
 import socket
 import subprocess
 import threading
 import urllib.request
+import os
 
-# Server settings
-HOST = '0.0.0.0'  # Listen at current machine
-PORT = 31522      # Connection port setting
+class Server:
+    def __init__(self, host='0.0.0.0', port=31522, blacklist_file=None):
+        self.host = host
+        self.port = port
+        self.blacklist_file = blacklist_file
 
-def handle_client(client_socket, addr):
-    print(f"[+] {addr[0]} connected")
+    def blacklist(self, file):
+        """Load the list of blocked IPs from a file."""
+        if file and os.path.isfile(file):
+            with open(file, "rt") as f:
+                return set(f.read().splitlines())
+        return set()
 
-    try:
-        while True:
-            # Receive the command from the client
-            command = client_socket.recv(1024).decode('utf-8')
+    def start(self):
+        """Start the server and begin listening for connections."""
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+            server_socket.bind((self.host, self.port))
+            server_socket.listen(50)
+            print(f"OpenTTY Server")
+            print(f"Copyright (C) 2024 - Mr. Lima")
+            print(f"")
+            print(f"Listening on port {self.port}")
 
-            if not command:
-                print(f"[-] {addr[0]} disconnected")
-                break
-            
-            print(f"[+] {addr[0]} -> {command.strip()}")
-
-            command = command.strip().split()
-            if command[0] == "get":
-                try:
-                    if not ' '.join(command[1:]):
-                        data = "Missing filename"
-                    else:
-                        data = open(' '.join(command[1:]), "rt").read()
-                except Exception as e:
-                    data = e
-
-            elif command[0] == "http":
-                if not ' '.join(command[1:]):
-                    data = "Missing website URL"
+            while True:
+                client_socket, addr = server_socket.accept()
+                if addr[0] in self.blacklist(self.blacklist_file):
+                    print(f"[-] {addr[0]} is blocked")
+                    client_socket.sendall("You are on the server blacklist!".encode('utf-8'))
+                    client_socket.close()
                 else:
-                    url = ' '.join(command[1:])
-                    try:
-                        # Using urllib to fetch the content of the URL
-                        with urllib.request.urlopen(url) as response:
-                            data = response.read().decode('utf-8')
-                    except Exception as e:
-                        data = e
-            
-            else:
-                data = execute_command(' '.join(command[0:]))
-                        
-            client_socket.sendall(data.encode('utf-8'))
+                    client_thread = threading.Thread(target=self.handle_client, args=(client_socket, addr))
+                    client_thread.start()
 
-    except Exception as e:
-        print(f"[-] Error with {addr[0]}: {e}")
+    def handle_client(self, client_socket, addr):
+        """Handle a specific client connection and commands."""
+        print(f"[+] {addr[0]} connected")
 
-    finally:
-        client_socket.close()
+        try:
+            while True:
+                command = client_socket.recv(1024).decode('utf-8').strip()
+                if not command:
+                    print(f"[-] {addr[0]} disconnected")
+                    break
 
-def execute_command(command):
-    try:
-        output = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
-        return output.decode('utf-8')
-    except subprocess.CalledProcessError as e:
-        return str(e.output.decode('utf-8'))
+                print(f"[+] {addr[0]} -> {command}")
+                response = self.parse_command(command)
+                client_socket.sendall(response.encode('utf-8'))
 
-def start_server():
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
-        server_socket.bind((HOST, PORT))
-        server_socket.listen(5)
-        print(f"OpenTTY Server")
-        print(f"")
-        print(f"[+] listening at port {PORT}")
+        except Exception as e:
+            print(f"[-] {addr[0]} -- {e}")
 
-        while True:
-            client_socket, addr = server_socket.accept()
+        finally:
+            client_socket.close()
 
-            client_thread = threading.Thread(target=handle_client, args=(client_socket, addr))
-            client_thread.start()
-            
+    def parse_command(self, command):
+        """Parse and execute the command sent by the client."""
+        cmd = command.split()[0]
+
+        if cmd == "get": return self.get_file_content(' '.join(command.split()[1:]))
+        elif cmd == "http": return self.fetch_url(' '.join(command.split()[1:]))
+        else: return self.execute_command(' '.join(command.split()[1:]))
+
+    def get_file_content(self, filename):
+        """Read the content of a text file."""
+        if not filename:
+            return "Filename is missing."
+        elif not oss.path.isfile(filename):
+            return f"File '{filename}' not found."
+        else:
+            try:
+                with open(filename, "rt") as f:
+                    return f.read()
+            except Exception as e:
+                return f"Error opening file: {e}"
+
+    def fetch_url(self, url):
+        """Fetch the content of a URL using urllib."""
+        if not url:
+            return "URL is missing."
+        try:
+            with urllib.request.urlopen(url) as response:
+                return response.read().decode('utf-8')
+        except Exception as e:
+            return f"Error accessing URL: {e}"
+
+    def execute_command(self, command):
+        """Execute a shell command safely."""
+        try: return subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT).decode('utf-8')
+        except subprocess.CalledProcessError as e: return e.output.decode('utf-8')
+
 if __name__ == '__main__':
-    start_server()
+    # Define script arguments
+    blacklist_file = sys.argv[1] if len(sys.argv) > 1 else None
+    server = Server(blacklist_file=blacklist_file)
+    server.start()
