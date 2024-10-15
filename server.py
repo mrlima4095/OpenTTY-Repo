@@ -115,10 +115,10 @@ if __name__ == '__main__':
                     print("OpenTTY Server has a new version released!\n\n")
                     print(f"Installed Version - {__version__}")
                     print(f"Avaliable Version - {github_version}")
+                    print("\n\nGithub Repository: https://github.com/mrlima4095/OpenTTY-Repo")
                 else:
                     print("OpenTTY Server is updated")
-        except Exception as e: return f"Error accessing URL: {e}"
-
+        except Exception as e: print(f"Error accessing URL: {e}")
 
 
     else:
