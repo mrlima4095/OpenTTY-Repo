@@ -13,6 +13,8 @@ import threading
 import urllib.request
 import os
 
+__version__ = "1.0"
+
 class Server:
     def __init__(self, host='0.0.0.0', port=31522, blacklist_file=None):
         self.host = host
@@ -31,7 +33,7 @@ class Server:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
             server_socket.bind((self.host, self.port))
             server_socket.listen(50)
-            print(f"OpenTTY Server")
+            print(f"OpenTTY Server " + __version__)
             print(f"Copyright (C) 2024 - Mr. Lima")
             print(f"")
             print(f"Listening on port {self.port}")
@@ -73,13 +75,13 @@ class Server:
 
         if cmd == "get": return self.get_file_content(' '.join(command.split()[1:]))
         elif cmd == "http": return self.fetch_url(' '.join(command.split()[1:]))
-        else: return self.execute_command(' '.join(command.split()[1:]))
+        else: return self.execute_command(command)
 
     def get_file_content(self, filename):
         """Read the content of a text file."""
         if not filename:
             return "Filename is missing."
-        elif not oss.path.isfile(filename):
+        elif not os.path.isfile(filename):
             return f"File '{filename}' not found."
         else:
             try:
@@ -104,7 +106,22 @@ class Server:
         except subprocess.CalledProcessError as e: return e.output.decode('utf-8')
 
 if __name__ == '__main__':
-    # Define script arguments
-    blacklist_file = sys.argv[1] if len(sys.argv) > 1 else None
-    server = Server(blacklist_file=blacklist_file)
-    server.start()
+    if "-u" in sys.argv:
+        try:
+            with urllib.request.urlopen("https://raw.githubusercontent.com/mrlima4095/OpenTTY-Repo/main/version.txt") as response:
+                github_version = response.read().decode('utf-8')
+
+                if github_version != __version__: 
+                    print("OpenTTY Server has a new version released!\n\n")
+                    print(f"Installed Version - {__version__}")
+                    print(f"Avaliable Version - {github_version}")
+                else:
+                    print("OpenTTY Server is updated")
+        except Exception as e: return f"Error accessing URL: {e}"
+
+
+
+    else:
+        blacklist_file = sys.argv[1] if len(sys.argv) > 1 else None
+        server = Server(blacklist_file=blacklist_file)
+        server.start()
