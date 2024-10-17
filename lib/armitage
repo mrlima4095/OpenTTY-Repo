@@ -6,8 +6,8 @@ description=OpenTTY Exploits
 
 include=/java/lib/netkit
 
-config=execute about armitage
-commmand=armitage
+config=execute about armitage;
+command=armitage
 
 armitage=execute x11 make armitage;
 
@@ -31,8 +31,8 @@ list.back=execute x11 make armitage
 
 Connect (Remote)=execute set TOOL=nc; x11 quest armitage;
 Connect - Server=execute nc $REPO;
-Get Local Adress=execute ifconfig; set OLD_TITLE=$TITLE; title IP Adress; if ($OUTPUT == null) warn Netork Error; if ($OUTPUT != null) warn $OUTPUT; title $OLD_TITLE; unset OLD_TITLE;
+Get Local Adress=execute ifconfig; 
 Search IP Info=execute set TOOL=fw; x11 quest armitage;
-IP Generator=execute query $REPO genip; set OLD_TITLE=$TITLE; title IP Generator; warn $OUTPUT; set GENIP=$OUTPUT; title $OLD_TITLE; unset OLD_TITLE;
+IP Generator=execute query $REPO genip;
 HTTP Requester=execute buff query $REPO http;
 Charge Server IP=execute x11 quest /java/lib/yang;

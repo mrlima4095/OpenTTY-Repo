@@ -97,8 +97,8 @@ class Server:
         if not url:
             return "URL is missing."
         try:
-            with urllib.request.urlopen(url) as response:
-                return response.read().deocde('utf-8')
+            with urllib.request.urlopen(url if url.startswith("http://") or url.startswith("https://") else "http://" + url) as response:
+                return response.read().decode('utf-8')
         except Exception as e:
             return f"Error accessing URL: {e}"
 
