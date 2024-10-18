@@ -16,9 +16,12 @@ xterm=execute x11 make jbuntu;
 screen.title=JBuntu $JVERSION
 screen.button=Menu
 screen.button.cmd=execute x11 list jbuntu; buff xterm;
+screen.back.label=Exit
+screen.back=execute exit;
 
 list.title=Menu
 list.content=About,Editor,Explorer,Terminal,Memory,Network Tools,View Logs,Packages,Settings,Exit
+list.back=execute x11 make jbuntu;
 
 About=execute warn JBuntu $JVERSION\nDesktop for OpenTTY;
 Editor=execute nano;
