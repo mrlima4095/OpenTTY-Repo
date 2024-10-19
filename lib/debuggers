@@ -6,7 +6,14 @@ description=Debuggers
 
 command=dumpsys
 
-dumpsys=execute log add info JBenchmark: Thread.run(OpenTTY.runScript) - Running 'dumpsys' script; echo [ JBenchmark ]\n\n; echo DUMP for Network Manager; netstat; if ($OUTPUT == true) echo -> Network detected! if ($OUTPUT == true) ifconfig; if ($OUTPUT == true) curl ifconfig.me/ua; if ($OUTPUT == true) fw; if ($OUTPUT != true) echo -> Device not connected! 
-  
+dumpsys=execute 
 
+log add info JBenchmark: Thread.run(OpenTTY.runScript) - Running 'dumpsys' script; 
+echo [ JBenchmark ]; echo; echo DUMP for Network Manager; 
+netstat; 
+if ($OUTPUT == true) echo -> Network detected! 
+if ($OUTPUT == true) ifconfig; 
+if ($OUTPUT == true) curl ifconfig.me/ua; 
+if ($OUTPUT == true) fw; 
+if ($OUTPUT != true) echo -> Device not connected! 
 

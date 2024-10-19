@@ -76,7 +76,6 @@ class Server:
 
         if cmd == "get": return self.get_file_content(' '.join(command.split()[1:]))
         elif cmd == "http": return self.fetch_url(' '.join(command.split()[1:]))
-        elif cmd == "genip": return f"{random.randint(1, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(1, 255)}"
         else: return self.execute_command(command)
 
     def get_file_content(self, filename):
