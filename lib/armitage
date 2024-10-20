@@ -6,10 +6,11 @@ description=OpenTTY Exploits
 
 include=/java/lib/netkit
 
-config=execute about armitage;
-command=armitage
+config=execute x11 make armitage;
+command=armitage,whois
 
 armitage=execute x11 make armitage;
+whois=query whois.iana.org:43
 
 
 [ DISPLAY ]
@@ -24,15 +25,17 @@ quest.title=Armitage
 quest.label=IP Adress
 quest.key=INPUT
 quest.cmd=execute $TOOL $INPUT; unset TOOL; unset INPUT;
+quest.back=execute x11 list armitage;
 
 list.title=Armitage Tools
-list.content=Connect (Remote),Connect - Server,Get Local Adress,Search IP Info,IP Generator,HTTP Requester,Charge Server IP
+list.content=Connect (Remote),Connect - Server,Get Local Adress,Search IP Info,WhoIS Search,IP Generator,HTTP Requester,Charge Server IP
 list.back=execute x11 make armitage
 
 Connect (Remote)=execute set TOOL=nc; x11 quest armitage;
 Connect - Server=execute nc $REPO;
 Get Local Adress=execute ifconfig; 
 Search IP Info=execute set TOOL=fw; x11 quest armitage;
-IP Generator=execute query $REPO genip;
+WhoIS Search=execute buff whois;
+IP Generator=execute genip; install nano; touch; add <title>$OUTPUT Info</title>; fw $OUTPUT; add $OUTPUT; html; get nano;
 HTTP Requester=execute buff query $REPO http;
 Charge Server IP=execute x11 quest /java/lib/yang;
