@@ -1,0 +1,23 @@
+[ Config ]
+
+name=SmartME
+version=1.0-beta
+description=OpenTTY Toolkit
+
+include=forge
+
+config=execute set SDK=1.0-beta; about sdkme;
+command=sdk
+
+sdk=execute x11 list sdkme; 
+
+
+[ DISPLAY ]
+
+list.title=SmartME SDK
+list.content=Forge,About SDK
+list.back=
+
+Forge=execute forge; 
+
+About SDK=execute set OLD_TITLE=$TITLE; title About SmartME; warn SmartME $SDK\nOpenTTY Toolkit; title $OLD_TITLE; unset OLD_TITLE;
