@@ -12,7 +12,6 @@ command=armitage,whois
 armitage=execute x11 make armitage;
 whois=query whois.iana.org:43
 
-
 [ DISPLAY ]
 
 screen.title=Armitage
