@@ -14,7 +14,7 @@ import threading
 import urllib.request
 import os
 
-__version__ = "1.1-beta"
+__version__ = "1.0.1"
 
 class Server:
     def __init__(self, host='0.0.0.0', port=31522, blacklist_file=None):
@@ -120,7 +120,7 @@ if __name__ == '__main__':
                 else:
                     print("OpenTTY Server is updated")
         except Exception as e: print(f"Error accessing URL: {e}")
-
+    elif "-p" in sys.argv: os.system("git pull")
 
     else:
         blacklist_file = sys.argv[1] if len(sys.argv) > 1 else None
