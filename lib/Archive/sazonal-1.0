@@ -1,0 +1,23 @@
+[ Config ]
+
+name=Sazonal
+version=1.0
+description=Halloween Features
+
+config=execute set Season=Halloween; mount /java/lib/sazonal;
+command=
+
+
+
+shell.name=ss
+shell.args=season
+
+season=execute echo $Season;
+
+
+
+
+
+
+
+
