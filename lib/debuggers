@@ -30,4 +30,3 @@ list.title=JBenchmark (Debug list)
 list.content=,,,,,,,,,,,
 list.back=execute x11 make debuggers;
 
-=execute true;
