@@ -1,0 +1,34 @@
+[ Config ]
+
+name=JBuntu 
+version=1.1
+description=Desktop for OpenTTY 
+
+include=/java/lib/yang,/java/lib/netkit
+
+config=execute set JVERSION=1.1; title JBuntu $JVERSION; log add info Running JBuntu $JVERSION; clear; logcat; buff xterm;
+command=xterm
+
+xterm=execute x11 make jbuntu;
+
+[ DISPLAY ]
+
+screen.title=JBuntu $JVERSION
+screen.button=Menu
+screen.button.cmd=execute x11 list jbuntu; buff xterm;
+screen.back.label=Exit
+screen.back=execute exit;
+
+list.title=Menu
+list.content=Text Editor,File Explorer,Network Tools,Terminal,Settings,Exit
+list.back=execute x11 make jbuntu;
+
+Text Editor=execute nano;
+File Explorer=execute dir f;
+Network Tools=execute nk;
+OpenTTY Store=execute yang;
+Terminal=execute x11 term; sh;
+Settings=execute x11 list /java/lib/settings;
+Exit=execute exit;
+
+
