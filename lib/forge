@@ -9,10 +9,6 @@ command=forge
 
 forge=execute x11 make forge; 
 
-file=template
-template=[ Config ]\n\nname=Untitled\nversion=1.0\ndescription=My Project\n\ninclude=\n\nconfig=\ncommand=
-
-
 [ DISPLAY ]
 
 screen.title=Forge $FORGE_VERSION
@@ -23,6 +19,6 @@ list.title=Forge Tools
 list.content=New Project,Open Project,Save Project
 list.back=execute x11 make forge;
 
-New Project=execute nano template;
+New Project=execute touch; add [ Config ]\n\nname=Untitled\nversion=1.0\ndescription=My Project\n\ninclude=\n\nconfig=\ncommand=;
 Open Project=execute set OLD_TITLE=$TITLE; title Open Project; dir f; title $OLD_TITLE; unset OLD_TITLE;
 Save Project=execute install nano; getty; find name nano; install $OUTPUT; rraw; get nano;
