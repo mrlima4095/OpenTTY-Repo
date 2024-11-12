@@ -7,7 +7,7 @@ description=Debuggers
 config=execute if ($VERSION != 1.10) echo This API requires OpenTTY 1.10 or newer;
 command=dumpsys
 
-dumpsys=execute log add info JBenchmark: Thread.run(OpenTTY.runScript) - Running 'dumpsys' script; echo [ JBenchmark ]; echo; echo ----------> Network Manager; netstat; dumpsys netman; echo; echo ----------> X Server; dumpsys x11; echo =======================\nEND-OF-DUMP;
+dumpsys=execute log add info JBenchmark: Thread.run(OpenTTY.runScript) - Running 'dumpsys' script; tick [JBenchmark] Running 'dumpsys'; echo [ JBenchmark ]; echo; echo ----------> Network Manager; netstat; dumpsys netman; echo; echo ----------> X Server; dumpsys x11; tick; echo =======================\nEND-OF-DUMP;
 
 shell.name=dumpsys
 shell.args=netman,x11
@@ -28,8 +28,8 @@ list.title=JBenchmark (Debug list)
 list.content=item1,item2,item3,item4,item5
 list.back=execute x11 make debuggers;
 
-item1=execute echo [JBenchmark] 'list.item1' selected;
-item2=execute echo [JBenchmark] 'list.item2' selected;
-item3=execute echo [JBenchmark] 'list.item3' selected;
-item4=execute echo [JBenchmark] 'list.item4' selected;
-item5=execute echo [JBenchmark] 'list.item5' selected;
+item1=execute echo [JBenchmark] -> 'list.item1' selected;
+item2=execute echo [JBenchmark] -> 'list.item2' selected;
+item3=execute echo [JBenchmark] -> 'list.item3' selected;
+item4=execute echo [JBenchmark] -> 'list.item4' selected;
+item5=execute echo [JBenchmark] -> 'list.item5' selected;

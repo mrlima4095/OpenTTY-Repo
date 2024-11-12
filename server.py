@@ -1,20 +1,13 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-#    
-#    python server.py 
-#    
-#  Copyright (C) 2024 "Mr. Lima"
-#  
-
 import sys
 import socket
-import random
 import subprocess
 import threading
 import urllib.request
+import urllib.parse
+import http.client
 import os
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 class Server:
     def __init__(self, host='0.0.0.0', port=31522, blacklist_file=None):
@@ -35,8 +28,6 @@ class Server:
             server_socket.bind((self.host, self.port))
             server_socket.listen(50)
             print(f"OpenTTY Server " + __version__)
-            print(f"Copyright (C) 2024 - Mr. Lima")
-            print(f"")
             print(f"Listening on port {self.port}")
 
             while True:
@@ -72,10 +63,12 @@ class Server:
 
     def parse_command(self, command):
         """Parse and execute the command sent by the client."""
-        cmd = command.split()[0]
-
-        if cmd == "get": return self.get_file_content(' '.join(command.split()[1:]))
-        elif cmd == "http": return self.fetch_url(' '.join(command.split()[1:]))
+        parts = command.split(maxsplit=1)
+        cmd = parts[0]
+        
+        if cmd == "get": return self.get_file_content(parts[1] if len(parts) > 1 else "")
+        elif cmd == "http": return self.fetch_url(parts[1] if len(parts) > 1 else "")
+        elif cmd == "post": return self.post_request(parts[1] if len(parts) > 1 else "")
         else: return self.execute_command(command)
 
     def get_file_content(self, filename):
@@ -100,6 +93,35 @@ class Server:
                 return response.read().decode('utf-8')
         except Exception as e:
             return f"Error accessing URL: {e}"
+
+    import http.client
+
+    # Dentro da classe Server, na função post_request:
+    def post_request(self, post_command):
+        """Make a POST request to a URL with provided data using only internal libraries."""
+        try:
+            parts = post_command.split(maxsplit=1)
+            if len(parts) < 2:
+                return "URL or data is missing."
+                
+            url, data = parts
+            data_dict = dict(param.split('=') for param in data.split('&'))
+            encoded_data = urllib.parse.urlencode(data_dict).encode('utf-8')
+
+            parsed_url = urllib.parse.urlparse(url)
+            connection_class = http.client.HTTPSConnection if parsed_url.scheme == "https" else http.client.HTTPConnection
+            connection = connection_class(parsed_url.netloc)
+            connection.request("POST", parsed_url.path, body=encoded_data,
+                               headers={"Content-Type": "application/x-www-form-urlencoded"})
+
+            response = connection.getresponse()
+            response_data = response.read().decode('utf-8')
+            connection.close()
+
+            return response_data
+
+        except Exception as e:
+            return f"[-] {e}"
 
     def execute_command(self, command):
         """Execute a shell command safely."""
