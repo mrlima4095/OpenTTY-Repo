@@ -7,7 +7,7 @@ import urllib.parse
 import http.client
 import os
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 
 class Server:
     def __init__(self, host='0.0.0.0', port=31522, blacklist_file=None):

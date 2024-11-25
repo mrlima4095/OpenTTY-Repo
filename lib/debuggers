@@ -1,10 +1,12 @@
 [ Config ]
 
 name=JBenchmark
-version=1.1
+version=1.2
 description=Debuggers 
 
-config=execute if ($VERSION != 1.10) echo This API requires OpenTTY 1.10 or newer;
+api.version=1.11
+api.error=execute echo [JBenchmark] This version requires OpenTTY 1.11
+
 command=dumpsys
 
 dumpsys=execute log add info JBenchmark: Thread.run(OpenTTY.runScript) - Running 'dumpsys' script; tick [JBenchmark] Running 'dumpsys'; echo [ JBenchmark ]; echo; echo ----------> Network Manager; netstat; dumpsys netman; echo; echo ----------> X Server; dumpsys x11; tick; echo =======================\nEND-OF-DUMP;

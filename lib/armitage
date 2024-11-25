@@ -24,7 +24,7 @@ screen.back=
 quest.title=Armitage
 quest.label=$LABEL
 quest.key=INPUT
-quest.cmd=execute $TOOL $INPUT; unset LABEL; unset TOOL; unset INPUT; 
+quest.cmd=execute tick Connecting...; $TOOL $INPUT; unset LABEL; unset TOOL; unset INPUT; 
 quest.back=execute x11 list armitage;
 
 list.title=Armitage Tools
@@ -36,7 +36,7 @@ Connect (Remote)=execute set TOOL=nc; set LABEL=IP Adress; x11 quest armitage;
 Connect - Server=execute nc $REPO;
 Get Local Adress=execute x11 list armitage; ifconfig; set OLD_TITLE=$TITLE; title IP Adress; warn $OUTPUT; title $OLD_TITLE; unset OLD_TITLE;
 Search IP Info=execute set TOOL=fw; set LABEL=IP Adress; x11 quest armitage;
-WhoIS Search=execute buff whois;
+WhoIS Search=execute set TOOL=whois; set LABEL=DOMAIN; x11 quest armitage;
 GoBuster=execute set TOOL=gobuster; set LABEL=URL; x11 quest armitage;
 Port Scanner=execute set TOOL=prscan; set LABEL=IP Adress; x11 quest armitage;
 IP Generator=execute genip; install nano; touch; add <title>$OUTPUT Info</title>; fw $OUTPUT; add $OUTPUT; html; get nano;
